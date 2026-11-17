@@ -8,206 +8,115 @@ export const PromoAdsSection = ({ onShopCategory, onOpenPhotoTester }) => {
   const handleCopyCode = (code) => {
     navigator.clipboard?.writeText(code);
     setCopiedCode(code);
-    addNotification('Coupon Copied!', `Code ${code} copied to clipboard. Apply at checkout.`, 'success');
+    addNotification('Coupon Copied', `Code ${code} copied to clipboard`, 'success');
     setTimeout(() => setCopiedCode(null), 3000);
   };
 
   return (
-    <section className="space-y-6 py-4">
+    <section className="space-y-4">
       
-      {/* Section Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-        <div>
-          <span className="text-xs font-bold text-[#b91c1c] uppercase tracking-wider block mb-1">
-            Special Offers & Seasonal Campaigns
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-            Promotional Deals & Discounts
-          </h2>
-          <p className="text-sm text-slate-600 mt-0.5">
-            Save on handcrafted personalized gifts with limited-time coupons & bulk corporate rates.
-          </p>
-        </div>
-
-        <button
-          onClick={onOpenPhotoTester}
-          className="px-5 py-2.5 bg-[#b91c1c] hover:bg-[#991b1b] text-white text-xs font-bold rounded-xl shadow-xs transition text-center"
-        >
-          Upload Photo & Preview Live →
-        </button>
-      </div>
-
-      {/* Main Grid of 3 Promotional Cards (No icons, clean text) */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* 3 Clean, Elegant Highlight Cards (No AI icons, clean human UI) */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         
-        {/* Ad 1: Anniversary Romance 30% OFF */}
-        <div className="rounded-2xl bg-gradient-to-br from-rose-900 to-rose-800 text-white p-6 shadow-md flex flex-col justify-between border border-rose-700">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between text-[11px] font-bold">
-              <span className="px-2.5 py-0.5 rounded-full bg-white/20 uppercase tracking-wider text-rose-100">
-                LIMITED TIME OFFER
+        {/* Card 1: Anniversary Offer */}
+        <div className="bg-rose-50/70 border border-rose-200/80 rounded-2xl p-5 flex flex-col justify-between hover:border-rose-300 transition">
+          <div className="space-y-2">
+            <div className="flex items-center justify-between text-xs">
+              <span className="font-bold text-rose-700 tracking-wider text-[11px] uppercase">
+                Anniversary Special
               </span>
-              <span className="text-rose-200">
-                Ends Tonight
+              <span className="text-[11px] font-semibold text-rose-600 bg-rose-100 px-2 py-0.5 rounded-full">
+                Flat 30% Off
               </span>
             </div>
 
-            <div>
-              <span className="text-3xl font-extrabold tracking-tight text-amber-300">
-                FLAT 30% OFF
-              </span>
-              <h3 className="text-lg font-bold mt-1 text-white leading-snug">
-                Anniversary & Couple Keepsakes
-              </h3>
-              <p className="text-xs text-rose-100/90 mt-1.5 leading-relaxed">
-                Personalized couple mugs, dual memory frames & photo books crafted to celebrate your love story.
-              </p>
-            </div>
+            <h3 className="text-base font-bold text-slate-900">
+              Couple & Memory Keepsakes
+            </h3>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Personalized dual mugs, memory frames and custom photo books for your special day.
+            </p>
           </div>
 
-          <div className="pt-6 space-y-3">
-            <div className="flex items-center justify-between bg-black/30 px-3.5 py-2 rounded-xl border border-white/15">
-              <span className="font-mono font-bold text-xs tracking-wider text-amber-200">
-                CODE: LOVE30
-              </span>
-              <button
-                onClick={() => handleCopyCode('LOVE30')}
-                className="text-[11px] font-bold text-white hover:text-amber-300 transition"
-              >
-                {copiedCode === 'LOVE30' ? 'Copied!' : 'Copy'}
-              </button>
-            </div>
-
+          <div className="pt-4 flex items-center justify-between gap-2">
+            <button
+              onClick={() => handleCopyCode('LOVE30')}
+              className="px-3 py-1.5 bg-white border border-rose-200 rounded-lg text-xs font-mono font-bold text-rose-800 hover:bg-rose-100/60 transition"
+            >
+              {copiedCode === 'LOVE30' ? 'Copied!' : 'CODE: LOVE30'}
+            </button>
             <button
               onClick={() => onShopCategory?.('Frames')}
-              className="w-full py-2.5 bg-white text-rose-900 hover:bg-rose-50 font-bold text-xs rounded-xl transition text-center"
+              className="text-xs font-bold text-rose-700 hover:text-rose-900 transition"
             >
-              Shop Anniversary Deals →
+              Shop Deals →
             </button>
           </div>
         </div>
 
-        {/* Ad 2: Corporate & Bulk Branding */}
-        <div className="rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 text-white p-6 shadow-md flex flex-col justify-between border border-slate-700">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between text-[11px] font-bold">
-              <span className="px-2.5 py-0.5 rounded-full bg-white/20 text-indigo-200 uppercase tracking-wider">
-                CORPORATE ORDERS
+        {/* Card 2: Interactive Photo Tester */}
+        <div className="bg-amber-50/70 border border-amber-200/80 rounded-2xl p-5 flex flex-col justify-between hover:border-amber-300 transition">
+          <div className="space-y-2">
+            <div className="flex items-center justify-between text-xs">
+              <span className="font-bold text-amber-800 tracking-wider text-[11px] uppercase">
+                Live Studio
               </span>
-              <span className="text-slate-300">
-                GST Invoicing Available
+              <span className="text-[11px] font-semibold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full">
+                Instant Preview
               </span>
             </div>
 
-            <div>
-              <span className="text-3xl font-extrabold tracking-tight text-sky-400">
-                UP TO 45% OFF
-              </span>
-              <h3 className="text-lg font-bold mt-1 text-white leading-snug">
-                Bespoke Corporate Hampers & Plaques
-              </h3>
-              <p className="text-xs text-slate-300 mt-1.5 leading-relaxed">
-                Laser engraved executive wooden plaques, customized drinkware & welcome kits with your brand logo.
-              </p>
-            </div>
+            <h3 className="text-base font-bold text-slate-900">
+              Test Your Photo on Any Gift
+            </h3>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Upload your favourite photo to preview it live on mugs, cushions, and frames before ordering.
+            </p>
           </div>
 
-          <div className="pt-6 space-y-3">
-            <div className="flex items-center justify-between bg-black/40 px-3.5 py-2 rounded-xl border border-white/10">
-              <span className="font-mono font-bold text-xs tracking-wider text-sky-200">
-                CODE: CORP15
-              </span>
-              <button
-                onClick={() => handleCopyCode('CORP15')}
-                className="text-[11px] font-bold text-white hover:text-sky-300 transition"
-              >
-                {copiedCode === 'CORP15' ? 'Copied!' : 'Copy'}
-              </button>
-            </div>
-
+          <div className="pt-4">
             <button
-              onClick={() => onShopCategory?.('Hampers')}
-              className="w-full py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs rounded-xl transition text-center"
+              onClick={onOpenPhotoTester}
+              className="w-full py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition text-center"
             >
-              Explore Corporate Catalog →
+              Upload Photo & Test Live →
             </button>
           </div>
         </div>
 
-        {/* Ad 3: Room Decor & Gift Offers */}
-        <div className="rounded-2xl bg-gradient-to-br from-neutral-900 to-neutral-800 text-white p-6 shadow-md flex flex-col justify-between border border-neutral-700">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between text-[11px] font-bold">
-              <span className="px-2.5 py-0.5 rounded-full bg-white/20 text-white uppercase tracking-wider">
-                HOME DÉCOR
+        {/* Card 3: Free Express Courier */}
+        <div className="bg-emerald-50/70 border border-emerald-200/80 rounded-2xl p-5 flex flex-col justify-between hover:border-emerald-300 transition">
+          <div className="space-y-2">
+            <div className="flex items-center justify-between text-xs">
+              <span className="font-bold text-emerald-800 tracking-wider text-[11px] uppercase">
+                Fast Delivery
               </span>
-              <span className="text-amber-300">
-                Free Adapter Included
+              <span className="text-[11px] font-semibold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">
+                Pan India
               </span>
             </div>
 
-            <div>
-              <span className="text-3xl font-extrabold tracking-tight text-amber-400">
-                FROM ₹249
-              </span>
-              <h3 className="text-lg font-bold mt-1 text-white leading-snug">
-                Custom Cushions & Desk Calendars
-              </h3>
-              <p className="text-xs text-slate-300 mt-1.5 leading-relaxed">
-                Spruce up your living space or office desk with customized velvet cushions and yearly memory calendars.
-              </p>
-            </div>
+            <h3 className="text-base font-bold text-slate-900">
+              Free Courier On Orders ₹999+
+            </h3>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Safe transit packaging with 100% damage replacement guarantee. Priority dispatch within 48 hours.
+            </p>
           </div>
 
-          <div className="pt-6 space-y-3">
-            <div className="flex items-center justify-between bg-black/40 px-3.5 py-2 rounded-xl border border-white/10">
-              <span className="font-mono font-bold text-xs tracking-wider text-amber-200">
-                CODE: DECOR10
-              </span>
-              <button
-                onClick={() => handleCopyCode('DECOR10')}
-                className="text-[11px] font-bold text-white hover:text-amber-300 transition"
-              >
-                {copiedCode === 'DECOR10' ? 'Copied!' : 'Copy'}
-              </button>
-            </div>
-
+          <div className="pt-4 flex items-center justify-between">
+            <span className="text-xs font-semibold text-emerald-700">
+              Auto applied at checkout
+            </span>
             <button
-              onClick={() => onShopCategory?.('Home')}
-              className="w-full py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs rounded-xl transition text-center"
+              onClick={() => onShopCategory?.('All categories')}
+              className="text-xs font-bold text-emerald-800 hover:text-emerald-950 transition"
             >
-              Shop Home Décor →
+              Browse All →
             </button>
           </div>
         </div>
 
-      </div>
-
-      {/* Ad Banner 4: Clean Horizontal Free Gift Offer Bar */}
-      <div className="rounded-xl border border-rose-200 bg-rose-50/60 p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div>
-          <span className="px-2 py-0.5 rounded bg-[#b91c1c] text-white text-[10px] font-bold uppercase tracking-wider">
-            FESTIVE OFFER
-          </span>
-          <h4 className="text-sm sm:text-base font-bold text-slate-900 mt-1">
-            Buy Any 2 Personalized Gifts, Get a Free Ceramic Photo Mug!
-          </h4>
-          <p className="text-xs text-slate-500">
-            Valid on all prepaid orders placed today across India.
-          </p>
-        </div>
-
-        <div className="flex items-center gap-2 shrink-0">
-          <span className="font-mono font-bold text-xs bg-white border border-slate-300 px-3 py-1.5 rounded-lg text-slate-800">
-            CODE: FREEPHOTO
-          </span>
-          <button
-            onClick={() => handleCopyCode('FREEPHOTO')}
-            className="px-3 py-1.5 bg-[#b91c1c] hover:bg-[#991b1b] text-white text-xs font-bold rounded-lg transition"
-          >
-            Apply Code
-          </button>
-        </div>
       </div>
 
     </section>

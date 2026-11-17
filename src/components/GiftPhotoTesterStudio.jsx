@@ -3,7 +3,7 @@ import { useStore } from '../context/StoreContext';
 import { 
   Upload, RotateCw, Sliders, Sun, Moon, 
   Check, ShieldCheck, Heart, ShoppingBag, 
-  RefreshCw, Monitor, Camera, X
+  RefreshCw, Monitor, X
 } from 'lucide-react';
 
 // Curated high-res quick-test photos so user can test immediately without searching files
@@ -223,20 +223,13 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
         <div className={`px-6 py-4 border-b flex items-center justify-between ${
           isRoomDark ? 'border-slate-800 bg-slate-900/60' : 'border-slate-100 bg-slate-50'
         }`}>
-          <div className="flex items-center gap-3">
-            <span className="p-2 rounded-xl bg-[#b91c1c] text-white shadow-md">
-              <Camera className="w-5 h-5 text-white" />
-            </span>
-            <div>
-              <div className="flex items-center gap-2">
-                <h3 className="font-bold text-sm sm:text-base tracking-tight text-slate-900 dark:text-white">
-                  GraphicDen Photo Customizer Studio
-                </h3>
-              </div>
-              <p className="text-[11px] text-slate-500">
-                Upload your picture, test zoom & angle, and preview it on your personalized gift before ordering.
-              </p>
-            </div>
+          <div>
+            <h3 className="font-bold text-sm sm:text-base tracking-tight text-slate-900 dark:text-white">
+              Photo Customizer Studio
+            </h3>
+            <p className="text-[11px] text-slate-500">
+              Upload your picture, test zoom & angle, and preview it on your personalized gift before ordering.
+            </p>
           </div>
 
           <div className="flex items-center gap-2">
