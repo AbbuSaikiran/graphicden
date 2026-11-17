@@ -37,6 +37,61 @@ export const StoreProvider = ({ children }) => {
   // Toast notifications
   const [notifications, setNotifications] = useState([]);
 
+  // Razorpay Webhooks State
+  const [razorpayWebhooks, setRazorpayWebhooks] = useState(() => {
+    const saved = localStorage.getItem('gd_razorpay_webhooks');
+    return saved ? JSON.parse(saved) : [
+      {
+        id: 'wh_evt_001',
+        event: 'payment.captured',
+        paymentId: 'pay_Luxe9012384',
+        orderId: 'order_GD88219',
+        amount: 29900,
+        currency: 'INR',
+        method: 'upi',
+        vpa: 'priya@okhdfcbank',
+        email: 'priya@example.com',
+        contact: '9876543210',
+        verified: true,
+        received_at: new Date(Date.now() - 3600000).toISOString()
+      }
+    ];
+  });
+
+  const recordRazorpayWebhook = (webhookPayload) => {
+    const p = webhookPayload.payload?.payment?.entity || {};
+    const record = {
+      id: `wh_${Date.now()}`,
+      event: webhookPayload.event || 'payment.captured',
+      paymentId: p.id || 'pay_unknown',
+      orderId: p.order_id || 'order_unknown',
+      amount: p.amount || 0,
+      currency: p.currency || 'INR',
+      method: p.method || 'upi',
+      vpa: p.vpa || null,
+      bank: p.bank || null,
+      email: p.email || 'customer@graphicden.in',
+      contact: p.contact || '',
+      verified: !!webhookPayload.verified,
+      signature: webhookPayload.webhook_signature || 'rzp_sec_auto_verified',
+      received_at: webhookPayload.received_at || new Date().toISOString(),
+      raw: webhookPayload
+    };
+
+    setRazorpayWebhooks((prev) => {
+      const updated = [record, ...prev];
+      localStorage.setItem('gd_razorpay_webhooks', JSON.stringify(updated));
+      return updated;
+    });
+
+    appendAuditLog(
+      'RAZORPAY_WEBHOOK_RECEIVED',
+      `Webhook verified: ${record.event} - Payment ID: ${record.paymentId} (₹${(record.amount / 100).toFixed(2)})`,
+      'Razorpay Gateway',
+      'SUCCESS'
+    );
+  };
+
   const addNotification = (title, message, type = 'info', extra = null) => {
     const id = Date.now().toString() + Math.random().toString();
     const newNotif = { id, title, message, type, extra, timestamp: new Date() };
@@ -633,6 +688,10 @@ export const StoreProvider = ({ children }) => {
         notifications,
         addNotification,
         removeNotification,
+
+        // Razorpay & Webhooks
+        razorpayWebhooks,
+        recordRazorpayWebhook,
 
         // Customer Auth & Security
         customerUser,

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
 import { ProductIllustration } from './ProductIllustrations';
 import { PromoAdsSection } from './PromoAdsSection';
-import { Camera, ArrowRight, ShieldCheck, Heart } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Heart } from 'lucide-react';
 
 export const ExactStorefront = ({ onOpenProductModal, onOpenPhotoTester }) => {
   const { products, addToCart, addNotification } = useStore();
@@ -65,10 +65,9 @@ export const ExactStorefront = ({ onOpenProductModal, onOpenPhotoTester }) => {
         <button
           type="button"
           onClick={() => onOpenPhotoTester && onOpenPhotoTester()}
-          className="px-5 py-3 bg-white text-[#b91c1c] hover:bg-red-50 rounded-xl font-bold text-xs sm:text-sm shadow-md flex items-center gap-2 transition shrink-0"
+          className="px-5 py-3 bg-white text-[#b91c1c] hover:bg-red-50 rounded-xl font-bold text-xs sm:text-sm shadow-md transition shrink-0 text-center"
         >
-          <Camera className="w-4 h-4 text-[#b91c1c]" />
-          <span>Upload Photo & Preview Live →</span>
+          Upload Photo & Preview Live →
         </button>
       </div>
 
@@ -180,10 +179,9 @@ export const ExactStorefront = ({ onOpenProductModal, onOpenPhotoTester }) => {
                     e.stopPropagation();
                     if (onOpenPhotoTester) onOpenPhotoTester(product);
                   }}
-                  className="py-2 px-2 bg-rose-50 hover:bg-rose-100 text-[#b91c1c] rounded-xl text-[11px] font-bold transition text-center flex items-center justify-center gap-1"
+                  className="py-2 px-2 bg-rose-50 hover:bg-rose-100 text-[#b91c1c] rounded-xl text-[11px] font-bold transition text-center"
                 >
-                  <Camera className="w-3 h-3" />
-                  <span>Test Photo</span>
+                  Test Photo
                 </button>
 
                 <button

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
 import { ProductIllustration } from './ProductIllustrations';
+import { RazorpayModal } from './RazorpayModal';
 import { Check } from 'lucide-react';
 
 export const ExactCheckoutView = ({ onContinueShopping }) => {
@@ -20,12 +21,16 @@ export const ExactCheckoutView = ({ onContinueShopping }) => {
   const [pinCode, setPinCode] = useState('506001');
 
   // Payment method state
-  const [payMethod, setPayMethod] = useState('Card'); // 'UPI' | 'Card' | 'Net banking' | 'Cash on delivery'
+  const [payMethod, setPayMethod] = useState('Razorpay'); // 'Razorpay' | 'Card' | 'UPI' | 'Net banking' | 'Cash on delivery'
   const [upiId, setUpiId] = useState('demo@upi');
   const [cardNumber, setCardNumber] = useState('4242 4242 4242 4242');
   const [nameOnCard, setNameOnCard] = useState('Priya Reddy');
   const [expiry, setExpiry] = useState('08/29');
   const [cvv, setCvv] = useState('•••');
+
+  // Razorpay Gateway & Webhook Modal
+  const [isRazorpayModalOpen, setIsRazorpayModalOpen] = useState(false);
+  const [viewingWebhookJson, setViewingWebhookJson] = useState(false);
 
   // Confirmed order data
   const [confirmedOrder, setConfirmedOrder] = useState(null);
@@ -46,7 +51,47 @@ export const ExactCheckoutView = ({ onContinueShopping }) => {
   };
 
   // Step 2: Complete payment and place order
+  const handleRazorpaySuccess = (razorpayData) => {
+    setIsRazorpayModalOpen(false);
+    const orderItemsSummary = cart.map(i => `${i.name} ×${i.quantity || 1}`).join(', ');
+
+    const newOrder = placeOrder({
+      customerName: fullName,
+      customerPhone: mobile,
+      customerEmail: email,
+      shippingAddress: `${address}, ${city} ${pinCode}`,
+      itemsSummary: orderItemsSummary,
+      items: [...cart],
+      totalAmount: total,
+      paymentMethod: `Razorpay (${razorpayData.paymentId})`,
+      paymentStatus: 'Paid',
+      orderStatus: 'Confirmed',
+      razorpayPaymentId: razorpayData.paymentId,
+      razorpayOrderId: razorpayData.orderId,
+      webhookVerified: true,
+      webhookPayload: razorpayData.webhook
+    });
+
+    setConfirmedOrder({
+      ...newOrder,
+      items: [...cart],
+      total: total,
+      paymentMethodLabel: `Razorpay (${razorpayData.paymentId})`,
+      razorpayPaymentId: razorpayData.paymentId,
+      razorpayOrderId: razorpayData.orderId,
+      webhookPayload: razorpayData.webhook,
+      timestamp: new Date().toLocaleString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })
+    });
+
+    setStep(3);
+  };
+
   const handlePayOrder = () => {
+    if (payMethod === 'Razorpay') {
+      setIsRazorpayModalOpen(true);
+      return;
+    }
+
     const orderItemsSummary = cart.map(i => `${i.name} ×${i.quantity || 1}`).join(', ');
     const paymentMethodLabel = payMethod === 'Card' 
       ? 'Card ending 4242' 
@@ -275,10 +320,11 @@ export const ExactCheckoutView = ({ onContinueShopping }) => {
             {/* Payment method selector buttons */}
             <div className="flex flex-wrap gap-2 text-xs">
               {[
-                { id: 'UPI', label: 'UPI' },
-                { id: 'Card', label: 'Card' },
-                { id: 'Net banking', label: 'Net banking' },
-                { id: 'Cash on delivery', label: 'Cash on delivery' }
+                { id: 'Razorpay', label: 'Razorpay (UPI / Cards / NetBanking)' },
+                { id: 'UPI', label: 'Direct UPI' },
+                { id: 'Card', label: 'Credit / Debit Card' },
+                { id: 'Net banking', label: 'Net Banking' },
+                { id: 'Cash on delivery', label: 'Cash on Delivery' }
               ].map(m => (
                 <button
                   key={m.id}
@@ -286,7 +332,7 @@ export const ExactCheckoutView = ({ onContinueShopping }) => {
                   onClick={() => setPayMethod(m.id)}
                   className={`px-3.5 py-2 rounded-xl font-semibold border transition text-xs ${
                     payMethod === m.id
-                      ? 'border-[#b91c1c] text-[#b91c1c] bg-rose-50/50'
+                      ? 'border-[#b91c1c] text-[#b91c1c] bg-rose-50/70 font-bold'
                       : 'border-slate-200 text-slate-700 hover:bg-slate-50'
                   }`}
                 >
@@ -294,6 +340,31 @@ export const ExactCheckoutView = ({ onContinueShopping }) => {
                 </button>
               ))}
             </div>
+
+            {/* If Razorpay selected */}
+            {payMethod === 'Razorpay' && (
+              <div className="p-4 rounded-xl border border-blue-200 bg-blue-50/50 space-y-2 text-xs">
+                <div className="flex items-center justify-between">
+                  <div className="font-bold text-slate-900 flex items-center gap-2">
+                    <span className="text-[#0c2340] font-black tracking-tight text-sm">Razorpay</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold">Secure Gateway</span>
+                  </div>
+                  <span className="text-[11px] text-emerald-700 font-semibold">Real-time Webhook Enabled</span>
+                </div>
+                <p className="text-[11px] text-slate-600 leading-relaxed">
+                  Pay via Google Pay, PhonePe, Paytm, BHIM UPI QR, Debit/Credit Card, or NetBanking. Instant automated webhook verification upon payment capture.
+                </p>
+                <div className="pt-1">
+                  <button
+                    type="button"
+                    onClick={() => setIsRazorpayModalOpen(true)}
+                    className="w-full py-2.5 bg-[#0c2340] hover:bg-[#1a3a60] text-white rounded-lg text-xs font-bold transition shadow-xs text-center"
+                  >
+                    Open Razorpay Gateway (₹{total.toLocaleString('en-IN')})
+                  </button>
+                </div>
+              </div>
+            )}
 
             {/* If UPI selected */}
             {payMethod === 'UPI' && (
@@ -447,8 +518,31 @@ export const ExactCheckoutView = ({ onContinueShopping }) => {
           </div>
 
           {/* Details */}
-          <div className="space-y-1 text-xs text-slate-600">
+          <div className="space-y-1.5 text-xs text-slate-600">
             <p><strong className="text-slate-800">Payment:</strong> {confirmedOrder.paymentMethodLabel}</p>
+            {confirmedOrder.razorpayPaymentId && (
+              <div className="p-3 rounded-xl bg-blue-50 border border-blue-100 space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-blue-900">Razorpay Gateway Verified</span>
+                  <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-100 text-emerald-800 font-bold">Webhook Delivered</span>
+                </div>
+                <p className="text-[11px] text-blue-800 font-mono">Payment ID: {confirmedOrder.razorpayPaymentId}</p>
+                {confirmedOrder.webhookPayload && (
+                  <button
+                    type="button"
+                    onClick={() => setViewingWebhookJson(!viewingWebhookJson)}
+                    className="text-[11px] text-blue-700 hover:text-blue-900 font-bold underline mt-1 block"
+                  >
+                    {viewingWebhookJson ? 'Hide Webhook Details' : 'View Verified Webhook Event (JSON)'}
+                  </button>
+                )}
+                {viewingWebhookJson && confirmedOrder.webhookPayload && (
+                  <pre className="mt-2 p-2 bg-slate-900 text-slate-100 text-[10px] rounded-lg overflow-x-auto max-h-48 font-mono">
+                    {JSON.stringify(confirmedOrder.webhookPayload, null, 2)}
+                  </pre>
+                )}
+              </div>
+            )}
             <p><strong className="text-slate-800">Delivering to:</strong> {fullName}, {address}, {city} {pinCode}</p>
             <p><strong className="text-slate-800">Estimated delivery:</strong> 3 to 5 working days</p>
           </div>
@@ -471,6 +565,20 @@ export const ExactCheckoutView = ({ onContinueShopping }) => {
 
         </div>
       )}
+
+      {/* Razorpay Gateway & Webhook Modal */}
+      <RazorpayModal
+        isOpen={isRazorpayModalOpen}
+        onClose={() => setIsRazorpayModalOpen(false)}
+        orderAmount={total}
+        orderId={`#GD-${Math.floor(10000 + Math.random() * 90000)}`}
+        customerDetails={{
+          name: fullName,
+          email: email,
+          mobile: mobile
+        }}
+        onSuccess={handleRazorpaySuccess}
+      />
 
     </div>
   );

@@ -1,6 +1,5 @@
 import React from 'react';
 import { useStore } from '../context/StoreContext';
-import { ShoppingBag, Camera, Tag, Phone, Info } from 'lucide-react';
 
 export const Header = ({ onOpenPhotoTester }) => {
   const { 
@@ -55,10 +54,9 @@ export const Header = ({ onOpenPhotoTester }) => {
             
             <button
               onClick={() => onOpenPhotoTester && onOpenPhotoTester()}
-              className="flex items-center gap-1.5 text-rose-700 hover:text-rose-900 font-semibold transition"
+              className="text-rose-700 hover:text-rose-900 font-semibold transition"
             >
-              <Camera className="w-4 h-4 text-[#b91c1c]" />
-              <span>Photo Customizer</span>
+              Photo Customizer
             </button>
 
             <button
@@ -101,23 +99,21 @@ export const Header = ({ onOpenPhotoTester }) => {
             {/* Photo & Test Button */}
             <button
               onClick={() => onOpenPhotoTester && onOpenPhotoTester()}
-              className="flex-1 sm:flex-none px-3.5 sm:px-4 py-2 bg-rose-50 hover:bg-rose-100 text-[#b91c1c] border border-rose-200 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-1.5"
+              className="flex-1 sm:flex-none px-3.5 sm:px-4 py-2 bg-rose-50 hover:bg-rose-100 text-[#b91c1c] border border-rose-200 rounded-xl text-xs sm:text-sm font-bold transition text-center"
             >
-              <Camera className="w-3.5 h-3.5" />
-              <span>Test Photo</span>
+              Test Photo
             </button>
 
             {/* Cart Button */}
             <button
               onClick={() => setCurrentView('cart')}
-              className={`flex-1 sm:flex-none px-4 sm:px-5 py-2 rounded-xl text-sm font-bold transition border text-center flex items-center justify-center gap-1.5 ${
+              className={`flex-1 sm:flex-none px-4 sm:px-5 py-2 rounded-xl text-sm font-bold transition border text-center ${
                 currentView === 'cart'
                   ? 'bg-[#b91c1c] text-white border-[#b91c1c]'
                   : 'bg-white text-slate-800 border-slate-300 hover:bg-slate-50'
               }`}
             >
-              <ShoppingBag className="w-4 h-4 hidden sm:inline" />
-              <span>Cart ({cartCount})</span>
+              Cart ({cartCount})
             </button>
 
             {/* Admin Button */}

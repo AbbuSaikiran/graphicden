@@ -6,7 +6,7 @@ export const ExactAdminDashboard = () => {
   const { 
     orders, products, updateOrderStatus, addProduct, restockProduct,
     adminUser, simulatedClientIp, remainingSessionSeconds,
-    switchAdminRole, addNotification
+    switchAdminRole, addNotification, razorpayWebhooks
   } = useStore();
 
   // Search & Filter state for Order list
@@ -15,6 +15,7 @@ export const ExactAdminDashboard = () => {
 
   // Security tab toggle inside admin dashboard so all required security specs are accessible
   const [showSecurityDrawer, setShowSecurityDrawer] = useState(false);
+  const [selectedWebhook, setSelectedWebhook] = useState(null);
 
   // New product form states
   const [productName, setProductName] = useState('');
@@ -472,6 +473,119 @@ export const ExactAdminDashboard = () => {
           </table>
         </div>
       </div>
+
+      {/* Card 5: Razorpay Gateway & Webhook Audit Log */}
+      <div className="bg-white border border-slate-200/80 rounded-2xl p-4 sm:p-6 shadow-xs space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <div className="flex items-center gap-2">
+              <h2 className="text-base sm:text-lg font-bold text-slate-900">
+                Razorpay Webhook Stream & Verification
+              </h2>
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800">
+                HMAC SHA256
+              </span>
+            </div>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Endpoint: <code className="bg-slate-100 px-1.5 py-0.5 rounded text-slate-700">https://api.graphicden.in/v1/webhooks/razorpay</code> · Secret: <code className="bg-slate-100 px-1.5 py-0.5 rounded text-slate-700">whsec_***99A</code>
+            </p>
+          </div>
+          <div className="text-right">
+            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
+              Listener Active
+            </span>
+          </div>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs sm:text-sm min-w-[650px]">
+            <thead>
+              <tr className="border-b border-slate-200 text-xs font-bold text-slate-900">
+                <th className="py-2.5 px-2 font-bold">Event</th>
+                <th className="py-2.5 px-3 font-bold">Payment ID</th>
+                <th className="py-2.5 px-3 font-bold">Order ID</th>
+                <th className="py-2.5 px-3 font-bold">Amount</th>
+                <th className="py-2.5 px-3 font-bold">Method</th>
+                <th className="py-2.5 px-3 font-bold">Signature</th>
+                <th className="py-2.5 px-3 font-bold text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 text-xs text-slate-800">
+              {(!razorpayWebhooks || razorpayWebhooks.length === 0) ? (
+                <tr>
+                  <td colSpan={7} className="py-6 text-center text-slate-400 text-xs">
+                    No webhook events recorded yet. Complete an order via Razorpay to see real-time webhook captures.
+                  </td>
+                </tr>
+              ) : (
+                razorpayWebhooks.map((wh) => (
+                  <tr key={wh.id} className="hover:bg-slate-50/60 transition">
+                    <td className="py-3 px-2 font-mono font-bold text-blue-900 whitespace-nowrap">
+                      {wh.event}
+                    </td>
+                    <td className="py-3 px-3 font-mono text-slate-900 whitespace-nowrap">
+                      {wh.paymentId}
+                    </td>
+                    <td className="py-3 px-3 font-mono text-slate-600 whitespace-nowrap">
+                      {wh.orderId}
+                    </td>
+                    <td className="py-3 px-3 font-bold text-slate-900 whitespace-nowrap">
+                      ₹{wh.amount ? (wh.amount / 100).toLocaleString('en-IN') : '0'}
+                    </td>
+                    <td className="py-3 px-3 uppercase text-slate-700 whitespace-nowrap font-medium">
+                      {wh.method}
+                    </td>
+                    <td className="py-3 px-3 whitespace-nowrap">
+                      <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-100 text-emerald-800">
+                        Verified
+                      </span>
+                    </td>
+                    <td className="py-3 px-3 text-right whitespace-nowrap">
+                      <button
+                        onClick={() => setSelectedWebhook(wh)}
+                        className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded font-semibold text-xs transition"
+                      >
+                        Inspect
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Webhook JSON Inspection Modal */}
+      {selectedWebhook && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
+          <div className="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b pb-3">
+              <div>
+                <h3 className="text-base font-bold text-slate-900">Webhook Payload Inspection</h3>
+                <p className="text-xs text-slate-500 font-mono">{selectedWebhook.event} · {selectedWebhook.paymentId}</p>
+              </div>
+              <button
+                onClick={() => setSelectedWebhook(null)}
+                className="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center font-bold"
+              >
+                ✕
+              </button>
+            </div>
+            <pre className="p-3 bg-slate-900 text-emerald-400 font-mono text-xs rounded-xl overflow-x-auto max-h-96">
+              {JSON.stringify(selectedWebhook.raw || selectedWebhook, null, 2)}
+            </pre>
+            <div className="flex justify-end pt-2">
+              <button
+                onClick={() => setSelectedWebhook(null)}
+                className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-bold"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
