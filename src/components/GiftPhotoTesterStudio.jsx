@@ -204,20 +204,17 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
           isRoomDark ? 'border-slate-800 bg-slate-900/60' : 'border-slate-100 bg-slate-50'
         }`}>
           <div className="flex items-center gap-3">
-            <span className="p-2 rounded-xl bg-rose-600 text-white shadow-md">
-              <Sparkles className="w-5 h-5 text-amber-300" />
+            <span className="p-2 rounded-xl bg-[#b91c1c] text-white shadow-md">
+              <Camera className="w-5 h-5 text-white" />
             </span>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="font-black text-sm sm:text-base tracking-tight">
-                  GraphicDen Live Photo Testing Studio
+                <h3 className="font-bold text-sm sm:text-base tracking-tight text-slate-900 dark:text-white">
+                  GraphicDen Photo Customizer Studio
                 </h3>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold">
-                  ● Real-Time Interactive
-                </span>
               </div>
               <p className="text-[11px] text-slate-500">
-                Upload your picture, adjust scale & angle, and test it realistically on mugs, LED frames, cushions & plaques!
+                Upload your photo, adjust zoom and angle, and preview it directly on your personalized gift before placing an order.
               </p>
             </div>
           </div>

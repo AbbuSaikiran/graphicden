@@ -51,28 +51,24 @@ export const ExactStorefront = ({ onOpenProductModal, onOpenPhotoTester }) => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-8">
       
-      {/* Exact Red Hero Banner with Photo Testing CTA */}
-      <div className="bg-[#b91c1c] rounded-3xl p-6 sm:p-10 text-white shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      {/* Red Hero Banner (Matching Image 5) */}
+      <div className="bg-[#b91c1c] rounded-3xl p-6 sm:p-10 text-white shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div className="space-y-2 max-w-xl">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 text-white text-[11px] font-bold backdrop-blur-xs">
-            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-            <span>Interactive Live Gift Customizer</span>
-          </div>
-          <h1 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
+          <h1 className="text-3xl sm:text-5xl font-bold tracking-tight">
             Gifts that feel personal
           </h1>
           <p className="text-sm sm:text-base text-red-100 leading-relaxed">
-            Mugs, frames, hampers and more, made for the people you love. Upload any photo & test live before you buy!
+            Mugs, frames, hampers and more, made for the people you love. Add to cart and pay securely.
           </p>
         </div>
 
         <button
           type="button"
           onClick={() => onOpenPhotoTester && onOpenPhotoTester()}
-          className="px-6 py-3.5 bg-white text-[#b91c1c] hover:bg-red-50 rounded-2xl font-black text-xs sm:text-sm shadow-xl flex items-center gap-2.5 transition transform hover:-translate-y-0.5 shrink-0"
+          className="px-5 py-3 bg-white text-[#b91c1c] hover:bg-red-50 rounded-xl font-bold text-xs sm:text-sm shadow-md flex items-center gap-2 transition shrink-0"
         >
           <Camera className="w-4 h-4 text-[#b91c1c]" />
-          <span>Photo & Test Any Gift Live →</span>
+          <span>Upload Photo & Preview Live →</span>
         </button>
       </div>
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { useStore } from '../context/StoreContext';
 import { 
   Gift, Heart, Phone, Mail, MapPin, Shield, Lock, 
-  ExternalLink, Sparkles, MessageSquare
+  ExternalLink, MessageSquare, ShieldCheck, Key
 } from 'lucide-react';
 
 export const Footer = () => {
@@ -17,17 +17,14 @@ export const Footer = () => {
           
           {/* Brand Col */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 to-pink-500 flex items-center justify-center text-white shadow-md">
-                <Gift className="w-5 h-5" />
-              </div>
-              <span className="text-xl font-black text-white tracking-tight">
-                Graphic<span className="text-rose-500">Den</span>.in
+            <div className="flex items-center gap-2">
+              <span className="text-2xl font-black text-[#b91c1c] tracking-tight">
+                GraphicDen<span className="text-slate-400 text-sm font-normal">.in</span>
               </span>
             </div>
 
             <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
-              India's bespoke online gift destination. Handcrafted 3D acrylic lamps, wooden photo plaques, neon signs, and luxury anniversary gift hampers.
+              India's premier online personalized gift studio. Handcrafted photo mugs, custom cushions, memory frames, keychains, and festive hampers.
             </p>
 
             <div className="pt-2 flex items-center gap-3">
@@ -38,40 +35,40 @@ export const Footer = () => {
                 className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition shadow-sm"
               >
                 <MessageSquare className="w-4 h-4" />
-                <span>WhatsApp Instant Support</span>
+                <span>WhatsApp Support</span>
               </a>
 
               <button
                 onClick={() => setCurrentView('admin')}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 text-xs font-semibold border border-amber-400/30 transition"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition"
               >
                 <Shield className="w-3.5 h-3.5" />
-                <span>Staff Portal</span>
+                <span>Admin Login</span>
               </button>
             </div>
           </div>
 
           {/* Col 2: Gift Categories */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider">Collections</h4>
+            <h4 className="text-xs font-bold text-white uppercase tracking-wider">Gift Categories</h4>
             <ul className="space-y-2 text-xs text-slate-400">
-              <li><button onClick={() => setCurrentView('store')} className="hover:text-rose-400 transition">3D Acrylic Illusion Lamps</button></li>
-              <li><button onClick={() => setCurrentView('store')} className="hover:text-rose-400 transition">Laser Engraved Wood Plaque</button></li>
-              <li><button onClick={() => setCurrentView('store')} className="hover:text-rose-400 transition">Custom Neon Wall Signs</button></li>
-              <li><button onClick={() => setCurrentView('store')} className="hover:text-rose-400 transition">Scannable Spotify Glass</button></li>
-              <li><button onClick={() => setCurrentView('store')} className="hover:text-rose-400 transition">Royal Wedding Hampers</button></li>
+              <li><button onClick={() => setCurrentView('store')} className="hover:text-red-400 transition">Personalized Photo Mugs</button></li>
+              <li><button onClick={() => setCurrentView('store')} className="hover:text-red-400 transition">Custom Cushions</button></li>
+              <li><button onClick={() => setCurrentView('store')} className="hover:text-red-400 transition">Memory Wooden Frames</button></li>
+              <li><button onClick={() => setCurrentView('store')} className="hover:text-red-400 transition">Name Keychains</button></li>
+              <li><button onClick={() => setCurrentView('store')} className="hover:text-red-400 transition">Festive Gift Hampers</button></li>
             </ul>
           </div>
 
           {/* Col 3: Company & Proposal Info */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider">About & Trust</h4>
+            <h4 className="text-xs font-bold text-white uppercase tracking-wider">Customer Care</h4>
             <ul className="space-y-2 text-xs text-slate-400">
-              <li><button onClick={() => setCurrentView('about')} className="hover:text-rose-400 transition">Our Craftsmanship Story</button></li>
-              <li><button onClick={() => setCurrentView('contact')} className="hover:text-rose-400 transition">Contact Studio & Location</button></li>
-              <li><button onClick={() => setCurrentView('dashboard')} className="hover:text-rose-400 transition">Track Parcel Status</button></li>
+              <li><button onClick={() => setCurrentView('about')} className="hover:text-red-400 transition">About GraphicDen.in</button></li>
+              <li><button onClick={() => setCurrentView('contact')} className="hover:text-red-400 transition">Contact & Studio Address</button></li>
+              <li><button onClick={() => setCurrentView('account')} className="hover:text-red-400 transition">Track Your Order</button></li>
               <li><span className="text-slate-500">Prepared by Veltrix Stories</span></li>
-              <li><span className="text-slate-500">GraphicDen.in Proposal ₹30,000</span></li>
+              <li><span className="text-slate-500">Website Development Proposal ₹30,000</span></li>
             </ul>
           </div>
 
@@ -84,14 +81,14 @@ export const Footer = () => {
                 <span>Salted bcrypt Hashing</span>
               </div>
               <div className="flex items-center gap-1.5 text-indigo-400">
-                <Shield className="w-3.5 h-3.5" />
+                <ShieldCheck className="w-3.5 h-3.5" />
                 <span>2FA Authenticator TOTP</span>
               </div>
-              <div className="flex items-center gap-1.5 text-rose-400">
-                <Sparkles className="w-3.5 h-3.5" />
+              <div className="flex items-center gap-1.5 text-amber-400">
+                <Key className="w-3.5 h-3.5" />
                 <span>Role-Based Access (RBAC)</span>
               </div>
-              <div className="flex items-center gap-1.5 text-amber-400">
+              <div className="flex items-center gap-1.5 text-sky-400">
                 <Shield className="w-3.5 h-3.5" />
                 <span>IP Allow-Listing Defense</span>
               </div>
