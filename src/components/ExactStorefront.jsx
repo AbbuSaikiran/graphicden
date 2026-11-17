@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
 import { ProductIllustration } from './ProductIllustrations';
-import { PromoAdsSection } from './PromoAdsSection';
 
 export const ExactStorefront = ({ onOpenProductModal, onOpenPhotoTester }) => {
   const { products, addToCart, addNotification } = useStore();
@@ -59,12 +58,6 @@ export const ExactStorefront = ({ onOpenProductModal, onOpenPhotoTester }) => {
           Mugs, frames, hampers and more, made for the people you love. Add to cart and pay securely.
         </p>
       </div>
-
-      {/* Clean Promotional Highlights */}
-      <PromoAdsSection 
-        onShopCategory={(cat) => setSelectedCategory(cat)}
-        onOpenPhotoTester={() => onOpenPhotoTester && onOpenPhotoTester()}
-      />
 
       {/* Filter Row matching Wireframe (Image 1 & Image 3) */}
       <div className="flex flex-col sm:flex-row gap-2.5 pt-2">
