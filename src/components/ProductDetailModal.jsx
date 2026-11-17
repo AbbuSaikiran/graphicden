@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
 import { 
-  X, Star, Heart, Sparkles, Upload, Gift, Truck, ShieldCheck, 
+  X, Star, Heart, Camera, Upload, Gift, Truck, ShieldCheck, 
   Check, Plus, Minus, ArrowRight, MessageSquare
 } from 'lucide-react';
 
@@ -186,7 +186,7 @@ export const ProductDetailModal = () => {
                 <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200/90 space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                      <Sparkles className="w-4 h-4 text-rose-600" />
+                      <Camera className="w-4 h-4 text-rose-600" />
                       Personalization Options
                     </span>
                     <span className="text-[10px] bg-rose-100 text-rose-700 px-2 py-0.5 rounded font-bold">

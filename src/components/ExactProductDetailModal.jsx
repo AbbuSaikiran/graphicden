@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
 import { ProductIllustration } from './ProductIllustrations';
-import { Sparkles, Upload, ShieldCheck, Heart, Truck, Check } from 'lucide-react';
+import { Camera, Upload, ShieldCheck, Heart, Truck, Check } from 'lucide-react';
 
 export const ExactProductDetailModal = ({ product, onClose, onOpenPhotoTester }) => {
   const { addToCart, addNotification } = useStore();
@@ -81,8 +81,8 @@ export const ExactProductDetailModal = ({ product, onClose, onOpenPhotoTester })
                 }}
                 className="text-rose-600 hover:text-rose-700 text-[11px] font-bold flex items-center gap-1"
               >
-                <Sparkles className="w-3 h-3 text-amber-500" />
-                <span>Open 3D Studio →</span>
+                <Camera className="w-3.5 h-3.5 text-[#b91c1c]" />
+                <span>Full Studio →</span>
               </button>
             </div>
 

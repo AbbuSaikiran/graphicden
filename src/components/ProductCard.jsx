@@ -1,6 +1,6 @@
 import React from 'react';
 import { useStore } from '../context/StoreContext';
-import { Heart, Sparkles, Star, Eye } from 'lucide-react';
+import { Heart, Camera, Star, Eye } from 'lucide-react';
 
 export const ProductCard = ({ product }) => {
   const { wishlist, toggleWishlist, setSelectedProduct } = useStore();
@@ -53,7 +53,7 @@ export const ProductCard = ({ product }) => {
         {/* Customizable overlay banner */}
         {product.isCustomizable && (
           <div className="absolute bottom-2 inset-x-2 bg-white/90 backdrop-blur-md py-1 px-2 rounded-lg text-center text-[10px] font-bold text-rose-700 flex items-center justify-center gap-1 shadow-xs">
-            <Sparkles className="w-3 h-3 text-rose-500" />
+            <Camera className="w-3 h-3 text-rose-500" />
             <span>Personalize with Photo & Text</span>
           </div>
         )}

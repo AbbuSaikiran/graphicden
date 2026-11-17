@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, Heart, ArrowRight, ShieldCheck, Truck, Clock, Award } from 'lucide-react';
+import { Camera, Gift, Heart, ArrowRight, ShieldCheck, Truck, Clock, Award } from 'lucide-react';
 import { OCCASIONS } from '../data/initialData';
 
 export const Banner = ({ onSelectOccasion, onShopNow }) => {
@@ -17,7 +17,7 @@ export const Banner = ({ onSelectOccasion, onShopNow }) => {
           <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
             
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-rose-100/80 border border-rose-200 text-rose-700 text-xs font-semibold shadow-xs">
-              <Sparkles className="w-3.5 h-3.5 text-rose-600 animate-spin" />
+              <Gift className="w-3.5 h-3.5 text-rose-600" />
               <span>India’s Leading Personalized Gift Brand</span>
             </div>
 
@@ -125,7 +125,7 @@ export const Banner = ({ onSelectOccasion, onShopNow }) => {
         <div className="mt-14 pt-8 border-t border-slate-200/80 grid grid-cols-2 md:grid-cols-4 gap-6">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0">
-              <Sparkles className="w-5 h-5" />
+              <Camera className="w-5 h-5" />
             </div>
             <div>
               <p className="text-xs font-bold text-slate-900">100% Bespoke Craft</p>

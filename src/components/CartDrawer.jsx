@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
 import { 
   X, Trash2, Plus, Minus, ShoppingBag, ArrowRight, 
-  Sparkles, ShieldCheck, Tag, Gift
+  ShieldCheck, Tag, Gift
 } from 'lucide-react';
 
 export const CartDrawer = () => {

@@ -4,7 +4,7 @@ import { Banner } from './Banner';
 import { ProductCard } from './ProductCard';
 import { CATEGORIES } from '../data/initialData';
 import { 
-  Sparkles, SlidersHorizontal, ArrowUpDown, Gift, 
+  SlidersHorizontal, ArrowUpDown, Gift, 
   MessageSquare, Star, Heart, CheckCircle2, Award 
 } from 'lucide-react';
 

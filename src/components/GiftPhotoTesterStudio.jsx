@@ -1,9 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useStore } from '../context/StoreContext';
 import { 
-  Sparkles, Upload, RotateCw, ZoomIn, ZoomOut, Sliders, 
-  Sun, Moon, Eye, Gift, Check, ShieldCheck, Heart, 
-  ShoppingBag, Download, RefreshCw, Layers, Palette, Monitor
+  Upload, RotateCw, Sliders, Sun, Moon, 
+  Check, ShieldCheck, Heart, ShoppingBag, 
+  RefreshCw, Monitor, Camera, X
 } from 'lucide-react';
 
 // Curated high-res quick-test photos so user can test immediately without searching files
@@ -40,61 +40,61 @@ const SAMPLE_TEST_PHOTOS = [
   }
 ];
 
-// 6 Gift Items Available for Photo Testing
+// 6 Core Gift Items Available for Photo Testing
 const GIFTS_FOR_TESTING = [
   {
-    id: 'gd-101',
-    name: 'Personalized Photo Mug',
+    id: 'gd-001',
+    name: 'Photo mug',
     type: 'mug',
-    price: 399,
-    originalPrice: 499,
-    category: 'Personalized Gifts',
-    description: '11oz Glossy Ceramic Mug with 360° panoramic wrap and microwave-safe finish.'
+    price: 299,
+    originalPrice: 399,
+    category: 'Mugs',
+    description: '11oz Glossy Ceramic Mug with panoramic photo wrap, microwave & dishwasher safe.'
   },
   {
-    id: 'gd-102',
-    name: 'LED Backlit Photo Frame',
+    id: 'gd-004',
+    name: 'Memory frame',
     type: 'led_frame',
-    price: 1299,
-    originalPrice: 1699,
-    category: 'Photo Gifts',
-    description: 'Solid beechwood frame with gentle warm-white ambient LED backlight.'
+    price: 449,
+    originalPrice: 599,
+    category: 'Frames',
+    description: 'Solid wooden moulding with protective anti-glare acrylic shield & desktop easel stand.'
   },
   {
-    id: 'gd-103',
-    name: 'Custom Velvet Cushion',
+    id: 'gd-003',
+    name: 'Custom cushion',
     type: 'cushion',
-    price: 599,
-    originalPrice: 899,
-    category: 'Home Decor',
+    price: 549,
+    originalPrice: 699,
+    category: 'Home',
     description: '16x16 inch plush microfiber velvet pillow with HD sublimation photo printing.'
   },
   {
-    id: 'gd-108',
-    name: 'Laser Engraved Wooden Plaque',
+    id: 'gd-009',
+    name: 'Couple mug set',
+    type: 'mug',
+    price: 549,
+    originalPrice: 699,
+    category: 'Mugs',
+    description: 'Twin nesting ceramic mugs with heart-shaped handles and personalized couple names.'
+  },
+  {
+    id: 'gd-002',
+    name: 'Name keychain',
     type: 'wood_plaque',
-    price: 799,
-    originalPrice: 1299,
-    category: 'Corporate Gifts',
-    description: 'Steamed European beechwood laser etched with micro-shaded photo depth.'
+    price: 149,
+    originalPrice: 199,
+    category: 'Keychains',
+    description: 'Laser-cut natural wood keychain with stainless steel split ring.'
   },
   {
-    id: 'gd-105',
-    name: 'Acrylic Name & Photo LED Lamp',
-    type: 'neon_lamp',
-    price: 899,
-    originalPrice: 1499,
-    category: 'Personalized Gifts',
-    description: 'Laser-cut cast acrylic plate with 7 RGB lighting modes and touch sensor.'
-  },
-  {
-    id: 'gd-104',
-    name: 'Couple Memory Collage Frame',
+    id: 'gd-008',
+    name: 'Love photo book',
     type: 'dual_frame',
-    price: 1499,
-    originalPrice: 1999,
-    category: 'Photo Gifts',
-    description: 'Double portrait gold-rimmed easel frame with protective anti-glare glass.'
+    price: 799,
+    originalPrice: 999,
+    category: 'Frames',
+    description: 'Hardcover 24-page custom photo album on premium lustre paper.'
   }
 ];
 
@@ -103,18 +103,28 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
   const fileInputRef = useRef(null);
 
   // Selected gift
-  const [selectedGift, setSelectedGift] = useState(
-    initialProduct ? (GIFTS_FOR_TESTING.find(g => g.id === initialProduct.id) || GIFTS_FOR_TESTING[0]) : GIFTS_FOR_TESTING[0]
-  );
+  const [selectedGift, setSelectedGift] = useState(() => {
+    if (initialProduct) {
+      return GIFTS_FOR_TESTING.find(g => g.id === initialProduct.id || g.name.toLowerCase() === initialProduct.name.toLowerCase()) || initialProduct;
+    }
+    return GIFTS_FOR_TESTING[0];
+  });
+
+  // Sync when initialProduct prop changes
+  useEffect(() => {
+    if (initialProduct) {
+      const match = GIFTS_FOR_TESTING.find(g => g.id === initialProduct.id || g.name.toLowerCase() === initialProduct.name.toLowerCase()) || initialProduct;
+      setSelectedGift(match);
+    }
+  }, [initialProduct]);
 
   // Active Photo (default to romantic couple sample)
   const [activePhoto, setActivePhoto] = useState(SAMPLE_TEST_PHOTOS[0].url);
   const [photoSourceLabel, setPhotoSourceLabel] = useState('Sample: Romantic Couple');
 
   // Custom text engraving
-  const [customText, setCustomText] = useState('Happy 5th Anniversary Rahul & Priya ❤️');
+  const [customText, setCustomText] = useState('Happy Anniversary Rahul & Priya ❤️');
   const [fontFamily, setFontFamily] = useState('font-serif');
-  const [textColor, setTextColor] = useState('#1e293b');
 
   // Photo Testing controls
   const [zoomLevel, setZoomLevel] = useState(100); // 50% to 200%
@@ -142,7 +152,7 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
       reader.onload = (event) => {
         setActivePhoto(event.target.result);
         setPhotoSourceLabel(`Uploaded: ${file.name}`);
-        addNotification('Photo Uploaded!', `Now testing ${file.name} on ${selectedGift.name}`, 'success');
+        addNotification('Photo Uploaded!', `Now previewing on ${selectedGift.name}`, 'success');
       };
       reader.readAsDataURL(file);
     }
@@ -182,19 +192,29 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
       customText,
       activePhoto,
       false,
-      `Customized via Live Photo Studio (${selectedFilter} filter, ${fontFamily})`,
+      `Customized via Photo Studio (${selectedFilter} filter, ${fontFamily})`,
       1
     );
     addNotification(
       'Customized Gift Added!',
-      `${selectedGift.name} with your photo & custom text added to cart.`,
+      `${selectedGift.name} with your custom photo added to cart.`,
       'success'
     );
     if (onClose) onClose();
   };
 
+  // Robust Gift Canvas Detection
+  const normName = (selectedGift?.name || '').toLowerCase();
+  const giftType = (selectedGift?.type || selectedGift?.categoryType || selectedGift?.category || '').toLowerCase();
+  const isMug = giftType.includes('mug') || normName.includes('mug');
+  const isCushion = giftType.includes('cushion') || normName.includes('cushion');
+  const isPlaqueOrKey = giftType.includes('plaque') || giftType.includes('key') || normName.includes('keychain') || normName.includes('plaque');
+  const isDualOrBook = giftType.includes('book') || normName.includes('book') || normName.includes('dual') || giftType === 'dual_frame';
+  // Default to frame if nothing else matched
+  const isFrame = !isMug && !isCushion && !isPlaqueOrKey && !isDualOrBook;
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-950/85 backdrop-blur-md animate-in fade-in overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in overflow-y-auto">
       <div className={`relative max-w-6xl w-full rounded-3xl overflow-hidden shadow-2xl border transition-colors duration-500 my-auto ${
         isRoomDark ? 'bg-slate-950 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900'
       }`}>
@@ -214,7 +234,7 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
                 </h3>
               </div>
               <p className="text-[11px] text-slate-500">
-                Upload your photo, adjust zoom and angle, and preview it directly on your personalized gift before placing an order.
+                Upload your picture, test zoom & angle, and preview it on your personalized gift before ordering.
               </p>
             </div>
           </div>
@@ -237,16 +257,17 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
             {onClose && (
               <button
                 onClick={onClose}
-                className="px-3 py-1.5 rounded-xl bg-slate-200/60 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-xs font-bold transition"
+                className="p-2 rounded-xl bg-slate-200/70 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-xs font-bold transition flex items-center justify-center"
+                title="Close Customizer"
               >
-                ✕ Close
+                <X className="w-4 h-4" />
               </button>
             )}
           </div>
         </div>
 
         {/* Main 2-Column Studio Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[580px]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[560px]">
           
           {/* Left: Interactive Canvas & Real-Life Simulator (7 Cols) */}
           <div className={`lg:col-span-7 p-6 sm:p-8 flex flex-col justify-between border-b lg:border-b-0 lg:border-r ${
@@ -256,8 +277,8 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
             {/* Environment Simulator Selector */}
             <div className="flex items-center justify-between pb-4">
               <span className="text-xs font-bold flex items-center gap-1.5 opacity-80">
-                <Monitor className="w-3.5 h-3.5 text-rose-500" />
-                <span>Test Simulation View:</span>
+                <Monitor className="w-3.5 h-3.5 text-rose-600" />
+                <span>Simulation View:</span>
               </span>
 
               <div className="flex items-center gap-1 bg-black/10 dark:bg-white/10 p-1 rounded-xl text-[11px] font-bold">
@@ -272,7 +293,7 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
                     onClick={() => setEnvironment(env.id)}
                     className={`px-2.5 py-1 rounded-lg transition ${
                       environment === env.id 
-                        ? 'bg-rose-600 text-white shadow-xs' 
+                        ? 'bg-[#b91c1c] text-white shadow-xs' 
                         : 'opacity-70 hover:opacity-100'
                     }`}
                   >
@@ -283,7 +304,7 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
             </div>
 
             {/* Central Realistic Gift Mockup Stage */}
-            <div className={`relative w-full aspect-square max-w-md mx-auto rounded-3xl p-6 flex items-center justify-center overflow-hidden transition-all duration-500 shadow-2xl ${
+            <div className={`relative w-full aspect-square max-w-md mx-auto rounded-3xl p-6 flex items-center justify-center overflow-hidden transition-all duration-500 shadow-xl ${
               environment === 'desk' 
                 ? 'bg-gradient-to-b from-[#3b2314] via-[#52331f] to-[#2b180d]' 
                 : environment === 'nightstand'
@@ -298,19 +319,17 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
                 <div className="absolute bottom-0 inset-x-0 h-28 bg-black/40 backdrop-blur-xs border-t border-white/10" />
               )}
 
-              {/* Dynamic Glow Aura for LED / Lamp products */}
-              {(selectedGift.type === 'led_frame' || selectedGift.type === 'neon_lamp') && (
-                <div 
-                  className="absolute inset-0 opacity-40 blur-3xl pointer-events-none transition-all duration-500"
-                  style={{ backgroundColor: isRoomDark ? ledColor : `${ledColor}40` }}
-                />
-              )}
+              {/* Dynamic Glow Aura */}
+              <div 
+                className="absolute inset-0 opacity-20 blur-3xl pointer-events-none transition-all duration-500"
+                style={{ backgroundColor: isRoomDark ? ledColor : `${ledColor}30` }}
+              />
 
-              {/* ---------------- 1. CERAMIC PHOTO MUG ---------------- */}
-              {selectedGift.type === 'mug' && (
+              {/* ---------------- 1. CERAMIC PHOTO MUG CANVAS ---------------- */}
+              {isMug && (
                 <div className="relative flex items-center justify-center animate-in zoom-in-95 duration-300">
                   {/* Mug Handle */}
-                  <div className="absolute -right-7 sm:-right-8 top-10 w-16 h-24 rounded-r-3xl border-8 border-slate-200 bg-transparent shadow-lg" />
+                  <div className="absolute -right-7 sm:-right-8 top-10 w-16 h-24 rounded-r-3xl border-8 border-slate-300 bg-transparent shadow-lg" />
                   
                   {/* Mug Body */}
                   <div className="relative z-10 w-44 sm:w-52 h-56 sm:h-64 bg-gradient-to-r from-slate-200 via-white to-slate-200 rounded-b-3xl rounded-t-sm shadow-2xl flex flex-col items-center justify-between p-3 border border-slate-300/80 overflow-hidden">
@@ -322,7 +341,7 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
                     <div className="relative w-full h-36 rounded-lg overflow-hidden border border-slate-200/80 shadow-inner bg-slate-900 flex items-center justify-center">
                       <img
                         src={activePhoto}
-                        alt="Test Mug"
+                        alt="Preview Mug"
                         className="w-full h-full object-cover transition-all duration-300"
                         style={{
                           transform: `scale(${zoomLevel / 100}) rotate(${rotationAngle}deg) translate(${offsetX}px, ${offsetY}px)`,
@@ -337,8 +356,7 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
                     {/* Custom Text Engraved along bottom of mug */}
                     <div className="w-full py-1.5 text-center">
                       <p 
-                        className={`text-xs font-bold truncate px-2 ${fontFamily}`}
-                        style={{ color: textColor }}
+                        className={`text-xs font-bold truncate px-2 text-slate-800 ${fontFamily}`}
                       >
                         {customText || 'Rahul & Priya'}
                       </p>
@@ -350,53 +368,8 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
                 </div>
               )}
 
-              {/* ---------------- 2. LED PHOTO FRAME ---------------- */}
-              {selectedGift.type === 'led_frame' && (
-                <div className="relative flex flex-col items-center animate-in zoom-in-95 duration-300">
-                  <div 
-                    className="relative z-10 p-4 rounded-2xl shadow-2xl transition-all duration-300 border-4 border-[#8b5a2b] bg-[#a77341]"
-                    style={{
-                      boxShadow: isRoomDark 
-                        ? `0 0 40px ${ledColor}, 0 0 80px ${ledColor}55` 
-                        : '0 20px 40px rgba(0,0,0,0.2)'
-                    }}
-                  >
-                    {/* Backlit LED Frame Glass */}
-                    <div className="w-52 sm:w-60 h-52 sm:h-60 rounded-xl overflow-hidden bg-black relative flex items-center justify-center border border-white/20">
-                      <img
-                        src={activePhoto}
-                        alt="Test LED Frame"
-                        className="w-full h-full object-cover transition-all duration-300"
-                        style={{
-                          transform: `scale(${zoomLevel / 100}) rotate(${rotationAngle}deg) translate(${offsetX}px, ${offsetY}px)`,
-                          filter: getFilterStyle()
-                        }}
-                      />
-                      
-                      {/* Ambient Warm LED Backlight Aura on Glass */}
-                      <div 
-                        className="absolute inset-0 mix-blend-screen opacity-30 pointer-events-none"
-                        style={{ backgroundColor: ledColor }}
-                      />
-
-                      {/* Engraved Plaque at Bottom of Frame */}
-                      {customText && (
-                        <div className="absolute bottom-2 inset-x-2 bg-black/60 backdrop-blur-md px-3 py-1 rounded-md text-center border border-white/20">
-                          <span className={`text-[11px] font-bold tracking-wide text-white ${fontFamily}`}>
-                            {customText}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Wooden Easel Desk Stand */}
-                  <div className="w-32 h-4 bg-[#6f451e] rounded-b-md shadow-md -mt-1 border-t border-[#8b5a2b]" />
-                </div>
-              )}
-
-              {/* ---------------- 3. VELVET CUSHION ---------------- */}
-              {selectedGift.type === 'cushion' && (
+              {/* ---------------- 2. VELVET CUSHION CANVAS ---------------- */}
+              {isCushion && (
                 <div className="relative flex items-center justify-center animate-in zoom-in-95 duration-300">
                   <div className="relative w-56 sm:w-64 h-56 sm:h-64 rounded-3xl bg-[#b91c1c] shadow-2xl p-4 flex flex-col items-center justify-center border-4 border-dashed border-rose-300/40 transform -rotate-1">
                     
@@ -404,7 +377,7 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
                     <div className="relative w-44 sm:w-52 h-44 sm:h-52 rounded-2xl overflow-hidden shadow-inner bg-slate-900 border border-white/20 flex items-center justify-center">
                       <img
                         src={activePhoto}
-                        alt="Test Cushion"
+                        alt="Preview Cushion"
                         className="w-full h-full object-cover transition-all duration-300"
                         style={{
                           transform: `scale(${zoomLevel / 100}) rotate(${rotationAngle}deg) translate(${offsetX}px, ${offsetY}px)`,
@@ -424,8 +397,8 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
                 </div>
               )}
 
-              {/* ---------------- 4. WOODEN PLAQUE ---------------- */}
-              {selectedGift.type === 'wood_plaque' && (
+              {/* ---------------- 3. WOODEN PLAQUE & KEYCHAIN CANVAS ---------------- */}
+              {isPlaqueOrKey && (
                 <div className="relative flex flex-col items-center animate-in zoom-in-95 duration-300">
                   <div className="w-56 sm:w-64 h-56 sm:h-64 rounded-2xl bg-[#d4a373] border-4 border-[#bc8a5f] shadow-2xl p-4 flex flex-col items-center justify-between text-[#582f0e]">
                     
@@ -433,7 +406,7 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
                     <div className="relative w-full h-36 rounded-lg overflow-hidden border border-[#a67449] shadow-inner bg-[#eddcd2] flex items-center justify-center">
                       <img
                         src={activePhoto}
-                        alt="Test Wood Plaque"
+                        alt="Preview Plaque"
                         className="w-full h-full object-cover mix-blend-multiply opacity-90 transition-all duration-300"
                         style={{
                           transform: `scale(${zoomLevel / 100}) rotate(${rotationAngle}deg) translate(${offsetX}px, ${offsetY}px)`,
@@ -446,7 +419,7 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
                       <p className={`text-xs font-black tracking-widest uppercase ${fontFamily}`}>
                         {customText || 'In Loving Memory'}
                       </p>
-                      <span className="text-[9px] font-mono opacity-70 tracking-wider">★ MASTER LASER CARVED ★</span>
+                      <span className="text-[9px] font-mono opacity-70 tracking-wider">★ LASER ENGRAVED FINISH ★</span>
                     </div>
                   </div>
                   
@@ -455,61 +428,14 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
                 </div>
               )}
 
-              {/* ---------------- 5. ACRYLIC NEON LAMP ---------------- */}
-              {selectedGift.type === 'neon_lamp' && (
+              {/* ---------------- 4. DUAL COLLAGE & PHOTO BOOK CANVAS ---------------- */}
+              {isDualOrBook && (
                 <div className="relative flex flex-col items-center animate-in zoom-in-95 duration-300">
-                  <div 
-                    className="relative z-10 w-48 sm:w-56 h-48 sm:h-56 rounded-2xl border-2 backdrop-blur-md p-3 flex flex-col items-center justify-center transition-all duration-300"
-                    style={{
-                      borderColor: ledColor,
-                      backgroundColor: `${ledColor}18`,
-                      boxShadow: isRoomDark 
-                        ? `0 0 35px ${ledColor}, inset 0 0 25px ${ledColor}40` 
-                        : `0 0 15px ${ledColor}50`
-                    }}
-                  >
-                    <div className="w-full h-32 rounded-xl overflow-hidden relative flex items-center justify-center">
-                      <img
-                        src={activePhoto}
-                        alt="Test Neon Lamp"
-                        className="w-full h-full object-cover transition-all duration-300"
-                        style={{
-                          transform: `scale(${zoomLevel / 100}) rotate(${rotationAngle}deg) translate(${offsetX}px, ${offsetY}px)`,
-                          filter: `${getFilterStyle()} contrast(130%)`
-                        }}
-                      />
-                      <div 
-                        className="absolute inset-0 mix-blend-color opacity-60 pointer-events-none"
-                        style={{ backgroundColor: ledColor }}
-                      />
-                    </div>
-
-                    <p 
-                      className={`text-xs font-black tracking-widest uppercase mt-3 truncate max-w-[180px] ${fontFamily}`}
-                      style={{ color: ledColor, textShadow: isRoomDark ? `0 0 10px ${ledColor}` : 'none' }}
-                    >
-                      {customText || 'FOREVER & ALWAYS'}
-                    </p>
-                  </div>
-
-                  {/* Solid Wooden Base with illuminated slot */}
-                  <div className="w-36 h-6 bg-[#5c3a21] rounded-lg shadow-xl border-t-2 border-[#825430] flex items-center justify-center -mt-1 z-20">
-                    <div 
-                      className="w-16 h-1 rounded-full animate-pulse"
-                      style={{ backgroundColor: ledColor }}
-                    />
-                  </div>
-                </div>
-              )}
-
-              {/* ---------------- 6. DUAL COLLAGE FRAME ---------------- */}
-              {selectedGift.type === 'dual_frame' && (
-                <div className="relative flex flex-col items-center animate-in zoom-in-95 duration-300">
-                  <div className="w-60 sm:w-72 h-52 sm:h-56 rounded-2xl bg-gradient-to-r from-amber-700 via-amber-600 to-amber-800 p-3 shadow-2xl flex items-center justify-center gap-2 border-2 border-amber-400">
+                  <div className="w-60 sm:w-72 h-52 sm:h-56 rounded-2xl bg-gradient-to-r from-amber-800 via-amber-700 to-amber-900 p-3 shadow-2xl flex items-center justify-center gap-2 border-2 border-amber-400">
                     <div className="w-1/2 h-40 rounded-lg overflow-hidden bg-black border border-amber-300 shadow-md">
                       <img
                         src={activePhoto}
-                        alt="Test Dual Frame"
+                        alt="Preview Album"
                         className="w-full h-full object-cover transition-all duration-300"
                         style={{
                           transform: `scale(${zoomLevel / 100}) rotate(${rotationAngle}deg) translate(${offsetX}px, ${offsetY}px)`,
@@ -518,7 +444,7 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
                       />
                     </div>
                     <div className="w-1/2 h-40 rounded-lg bg-amber-50 p-2 flex flex-col items-center justify-center text-center border border-amber-300 shadow-md">
-                      <Heart className="w-6 h-6 text-rose-600 fill-rose-600 mb-2 animate-bounce" />
+                      <Heart className="w-6 h-6 text-rose-600 fill-rose-600 mb-2" />
                       <p className={`text-[10px] font-bold text-slate-800 ${fontFamily}`}>
                         {customText || 'You & Me'}
                       </p>
@@ -526,6 +452,45 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
                     </div>
                   </div>
                   <div className="w-36 h-3 bg-[#4a2810] rounded-b-md shadow-md -mt-0.5" />
+                </div>
+              )}
+
+              {/* ---------------- 5. WOODEN MEMORY PHOTO FRAME CANVAS (Default) ---------------- */}
+              {isFrame && (
+                <div className="relative flex flex-col items-center animate-in zoom-in-95 duration-300">
+                  <div 
+                    className="relative z-10 p-4 rounded-2xl shadow-2xl transition-all duration-300 border-4 border-[#8b5a2b] bg-[#a77341]"
+                    style={{
+                      boxShadow: isRoomDark 
+                        ? `0 0 30px ${ledColor}40` 
+                        : '0 20px 40px rgba(0,0,0,0.15)'
+                    }}
+                  >
+                    {/* Frame Glass */}
+                    <div className="w-52 sm:w-60 h-52 sm:h-60 rounded-xl overflow-hidden bg-black relative flex items-center justify-center border border-white/20">
+                      <img
+                        src={activePhoto}
+                        alt="Preview Frame"
+                        className="w-full h-full object-cover transition-all duration-300"
+                        style={{
+                          transform: `scale(${zoomLevel / 100}) rotate(${rotationAngle}deg) translate(${offsetX}px, ${offsetY}px)`,
+                          filter: getFilterStyle()
+                        }}
+                      />
+
+                      {/* Engraved Plaque at Bottom of Frame */}
+                      {customText && (
+                        <div className="absolute bottom-2 inset-x-2 bg-black/60 backdrop-blur-md px-3 py-1 rounded-md text-center border border-white/20">
+                          <span className={`text-[11px] font-bold tracking-wide text-white ${fontFamily}`}>
+                            {customText}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Wooden Easel Desk Stand */}
+                  <div className="w-32 h-4 bg-[#6f451e] rounded-b-md shadow-md -mt-1 border-t border-[#8b5a2b]" />
                 </div>
               )}
 
@@ -557,10 +522,10 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
             {/* Step 1: Select Gift to Test On */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-bold uppercase tracking-wider text-rose-600 flex items-center gap-1">
-                  <span>1. Select Gift Item</span>
+                <label className="text-xs font-bold uppercase tracking-wider text-[#b91c1c] flex items-center gap-1">
+                  <span>1. Choose Product</span>
                 </label>
-                <span className="text-xs font-black text-rose-700">
+                <span className="text-xs font-black text-[#b91c1c]">
                   ₹{selectedGift.price} <span className="line-through text-slate-400 font-normal">₹{selectedGift.originalPrice}</span>
                 </span>
               </div>
@@ -570,14 +535,14 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
                   <button
                     key={gift.id}
                     onClick={() => setSelectedGift(gift)}
-                    className={`p-2.5 rounded-xl border text-left transition ${
+                    className={`p-2 rounded-xl border text-left transition ${
                       selectedGift.id === gift.id
-                        ? 'border-rose-600 bg-rose-50/50 dark:bg-rose-950/40 font-bold shadow-xs'
+                        ? 'border-[#b91c1c] bg-red-50 dark:bg-red-950/40 font-bold shadow-xs'
                         : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'
                     }`}
                   >
-                    <p className="text-xs truncate">{gift.name}</p>
-                    <span className="text-[10px] text-rose-600 font-bold">₹{gift.price}</span>
+                    <p className="text-xs truncate text-slate-900 dark:text-white">{gift.name}</p>
+                    <span className="text-[10px] text-[#b91c1c] font-bold">₹{gift.price}</span>
                   </button>
                 ))}
               </div>
@@ -585,8 +550,8 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
 
             {/* Step 2: Photo Source (Upload YOUR photo OR pick sample) */}
             <div className="space-y-3 pt-1 border-t border-slate-100 dark:border-slate-800">
-              <label className="text-xs font-bold uppercase tracking-wider text-rose-600 flex items-center gap-1">
-                <span>2. Photo & Picture Source</span>
+              <label className="text-xs font-bold uppercase tracking-wider text-[#b91c1c] flex items-center gap-1">
+                <span>2. Upload Photo or Pick Sample</span>
               </label>
 
               {/* Upload Button */}
@@ -601,16 +566,16 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="flex-1 py-3 px-4 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white rounded-xl text-xs font-bold shadow-md flex items-center justify-center gap-2 transition"
+                  className="flex-1 py-3 px-4 bg-[#b91c1c] hover:bg-[#991b1b] text-white rounded-xl text-xs font-bold shadow-md flex items-center justify-center gap-2 transition"
                 >
-                  <Upload className="w-4 h-4 text-amber-300" />
-                  <span>Upload Your Own Photo (JPG, PNG)</span>
+                  <Upload className="w-4 h-4 text-white" />
+                  <span>Choose Photo from Device (JPG, PNG)</span>
                 </button>
               </div>
 
               {/* Quick Sample Photos Bar */}
               <div>
-                <p className="text-[11px] text-slate-500 mb-1.5 font-medium">Or test instantly with sample photos:</p>
+                <p className="text-[11px] text-slate-500 mb-1.5 font-medium">Or test instantly with samples:</p>
                 <div className="flex items-center gap-2 overflow-x-auto pb-1">
                   {SAMPLE_TEST_PHOTOS.map(sample => (
                     <button
@@ -621,7 +586,7 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
                       }}
                       className={`relative w-12 h-12 rounded-xl overflow-hidden border-2 shrink-0 transition ${
                         activePhoto === sample.url
-                          ? 'border-rose-600 scale-105 shadow-md'
+                          ? 'border-[#b91c1c] scale-105 shadow-md'
                           : 'border-slate-200 opacity-70 hover:opacity-100'
                       }`}
                       title={sample.name}
@@ -633,11 +598,11 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
               </div>
             </div>
 
-            {/* Step 3: Interactive Photo Adjustment Controls ("Test It") */}
+            {/* Step 3: Interactive Photo Adjustment Controls */}
             <div className="space-y-4 pt-2 border-t border-slate-100 dark:border-slate-800">
-              <label className="text-xs font-bold uppercase tracking-wider text-rose-600 flex items-center gap-1">
+              <label className="text-xs font-bold uppercase tracking-wider text-[#b91c1c] flex items-center gap-1">
                 <Sliders className="w-3.5 h-3.5" />
-                <span>3. Photo Adjustments & Filter Tests</span>
+                <span>3. Adjust Scale, Angle & Filter</span>
               </label>
 
               {/* Zoom & Rotation */}
@@ -645,7 +610,7 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
                 <div>
                   <div className="flex items-center justify-between text-[11px] font-bold mb-1">
                     <span>Zoom ({zoomLevel}%)</span>
-                    <button onClick={() => setZoomLevel(100)} className="text-rose-600 hover:underline">100%</button>
+                    <button onClick={() => setZoomLevel(100)} className="text-[#b91c1c] hover:underline">100%</button>
                   </div>
                   <input
                     type="range"
@@ -653,7 +618,7 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
                     max="200"
                     value={zoomLevel}
                     onChange={(e) => setZoomLevel(Number(e.target.value))}
-                    className="w-full accent-rose-600 cursor-pointer"
+                    className="w-full accent-[#b91c1c] cursor-pointer"
                   />
                 </div>
 
@@ -673,22 +638,22 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
 
               {/* Photo Filter Tone Test */}
               <div>
-                <span className="text-[11px] font-bold block mb-1.5">Photo Lighting Filter:</span>
+                <span className="text-[11px] font-bold block mb-1.5">Color Tone:</span>
                 <div className="grid grid-cols-3 gap-1.5 text-[11px] font-semibold">
                   {[
-                    { id: 'none', label: 'Original HD' },
-                    { id: 'warm', label: 'Warm Sunset' },
-                    { id: 'bw', label: 'B&W Classic' },
-                    { id: 'sepia', label: 'Retro Sepia' },
-                    { id: 'vibrant', label: 'Vibrant Pop' },
-                    { id: 'glow', label: 'Cyber Glow' }
+                    { id: 'none', label: 'Original' },
+                    { id: 'warm', label: 'Warm' },
+                    { id: 'bw', label: 'B&W' },
+                    { id: 'sepia', label: 'Sepia' },
+                    { id: 'vibrant', label: 'Vibrant' },
+                    { id: 'glow', label: 'Vivid' }
                   ].map(f => (
                     <button
                       key={f.id}
                       onClick={() => setSelectedFilter(f.id)}
                       className={`py-1.5 px-2 rounded-lg border text-center transition ${
                         selectedFilter === f.id
-                          ? 'bg-rose-600 text-white border-rose-600 font-bold'
+                          ? 'bg-[#b91c1c] text-white border-[#b91c1c] font-bold'
                           : 'border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900'
                       }`}
                     >
@@ -697,38 +662,12 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
                   ))}
                 </div>
               </div>
-
-              {/* LED Lighting Color Picker for LED products */}
-              {(selectedGift.type === 'led_frame' || selectedGift.type === 'neon_lamp') && (
-                <div>
-                  <span className="text-[11px] font-bold block mb-1.5">LED Glow Color:</span>
-                  <div className="flex items-center gap-2">
-                    {[
-                      { label: 'Warm Amber', color: '#f59e0b' },
-                      { label: 'Neon Rose', color: '#f43f5e' },
-                      { label: 'Cyber Cyan', color: '#06b6d4' },
-                      { label: 'Emerald', color: '#10b981' },
-                      { label: 'Violet', color: '#8b5cf6' }
-                    ].map(glow => (
-                      <button
-                        key={glow.color}
-                        onClick={() => setLedColor(glow.color)}
-                        className={`w-7 h-7 rounded-full border-2 transition ${
-                          ledColor === glow.color ? 'scale-125 border-white shadow-md' : 'border-transparent opacity-80'
-                        }`}
-                        style={{ backgroundColor: glow.color }}
-                        title={glow.label}
-                      />
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* Step 4: Custom Inscription / Text */}
             <div className="space-y-3 pt-2 border-t border-slate-100 dark:border-slate-800">
-              <label className="text-xs font-bold uppercase tracking-wider text-rose-600">
-                4. Custom Inscription / Engraved Text
+              <label className="text-xs font-bold uppercase tracking-wider text-[#b91c1c]">
+                4. Name / Inscribed Text
               </label>
 
               <input
@@ -736,22 +675,22 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
                 value={customText}
                 onChange={(e) => setCustomText(e.target.value)}
                 placeholder="E.g. Rahul & Priya 2026 ❤️"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-[#b91c1c]"
               />
 
               <div className="flex items-center gap-2">
                 <span className="text-[11px] text-slate-500 font-medium">Font Style:</span>
                 {[
-                  { id: 'font-serif', label: 'Classic Serif' },
-                  { id: 'font-sans', label: 'Modern Sans' },
-                  { id: 'font-mono', label: 'Laser Mono' }
+                  { id: 'font-serif', label: 'Serif' },
+                  { id: 'font-sans', label: 'Sans' },
+                  { id: 'font-mono', label: 'Mono' }
                 ].map(font => (
                   <button
                     key={font.id}
                     onClick={() => setFontFamily(font.id)}
                     className={`px-2.5 py-1 rounded-lg border text-[11px] transition ${
                       fontFamily === font.id 
-                        ? 'border-rose-600 bg-rose-50 text-rose-700 font-bold' 
+                        ? 'border-[#b91c1c] bg-red-50 text-[#b91c1c] font-bold' 
                         : 'border-slate-200'
                     }`}
                   >
@@ -766,19 +705,19 @@ export const GiftPhotoTesterStudio = ({ isOpen, onClose, initialProduct }) => {
               <button
                 type="button"
                 onClick={handleAddCustomizedToCart}
-                className="w-full py-3.5 px-4 bg-[#b91c1c] hover:bg-[#991b1b] text-white rounded-2xl font-bold text-sm shadow-xl flex items-center justify-center gap-2 transition transform hover:-translate-y-0.5"
+                className="w-full py-3.5 px-4 bg-[#b91c1c] hover:bg-[#991b1b] text-white rounded-2xl font-bold text-sm shadow-xl flex items-center justify-center gap-2 transition"
               >
                 <ShoppingBag className="w-4 h-4" />
-                <span>Add Tested Gift to Cart (₹{selectedGift.price})</span>
+                <span>Add Customized Gift to Cart (₹{selectedGift.price})</span>
               </button>
 
               <div className="flex items-center justify-center gap-4 text-[11px] text-slate-500 font-medium pt-1">
                 <span className="flex items-center gap-1">
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-                  <span>100% Quality Guaranteed</span>
+                  <span>100% Quality Guarantee</span>
                 </span>
                 <span>•</span>
-                <span>Free Gift Box Included</span>
+                <span>Secure Packaging Included</span>
               </div>
             </div>
 

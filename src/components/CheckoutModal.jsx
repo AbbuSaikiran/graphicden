@@ -3,7 +3,7 @@ import { useStore } from '../context/StoreContext';
 import confetti from 'canvas-confetti';
 import { 
   X, ShieldCheck, MapPin, CreditCard, QrCode, Truck, 
-  CheckCircle2, ArrowRight, Lock, Sparkles, Phone, Mail, User
+  CheckCircle2, ArrowRight, Lock, Phone, Mail, User
 } from 'lucide-react';
 
 export const CheckoutModal = () => {

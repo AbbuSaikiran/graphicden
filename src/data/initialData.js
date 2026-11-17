@@ -338,7 +338,7 @@ export const INITIAL_AUDIT_LOGS = [
 ];
 
 export const OCCASIONS = [
-  { id: 'all', label: 'All Occasions', icon: 'sparkles' },
+  { id: 'all', label: 'All Occasions', icon: 'gift' },
   { id: 'anniversary', label: 'Anniversary', icon: 'heart' },
   { id: 'birthday', label: 'Birthday', icon: 'cake' },
   { id: 'corporate', label: 'Corporate', icon: 'briefcase' },

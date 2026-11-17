@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
 import { 
-  Gift, Heart, Award, Sparkles, Phone, Mail, MapPin, 
+  Gift, Heart, Award, Phone, Mail, MapPin, 
   Send, ShieldCheck, CheckCircle2, ArrowRight
 } from 'lucide-react';
 
@@ -37,8 +37,8 @@ export const AboutView = () => {
         </div>
 
         <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm space-y-3">
-          <div className="w-12 h-12 rounded-2xl bg-pink-100 text-pink-600 flex items-center justify-center">
-            <Sparkles className="w-6 h-6" />
+          <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center">
+            <Award className="w-6 h-6" />
           </div>
           <h3 className="text-lg font-bold text-slate-900">Precision Laser Engineering</h3>
           <p className="text-xs text-slate-600 leading-relaxed">

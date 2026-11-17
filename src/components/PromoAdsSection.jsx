@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, Tag, ArrowRight, Clock, Copy, Check, Gift, Percent, Building2, Flame } from 'lucide-react';
+import { Camera, Tag, ArrowRight, Clock, Copy, Check, Gift, Percent, Building2, Flame } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 
 export const PromoAdsSection = ({ onShopCategory, onOpenPhotoTester }) => {
@@ -33,10 +33,10 @@ export const PromoAdsSection = ({ onShopCategory, onOpenPhotoTester }) => {
 
         <button
           onClick={onOpenPhotoTester}
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white text-xs font-bold rounded-xl shadow-md transition transform hover:-translate-y-0.5"
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#b91c1c] hover:bg-[#991b1b] text-white text-xs font-bold rounded-xl shadow-md transition"
         >
-          <Sparkles className="w-4 h-4 text-amber-300" />
-          <span>Upload Photo & Test on Any Gift →</span>
+          <Camera className="w-4 h-4 text-white" />
+          <span>Upload Photo & Preview Live →</span>
         </button>
       </div>
 
@@ -177,7 +177,7 @@ export const PromoAdsSection = ({ onShopCategory, onOpenPhotoTester }) => {
                 TRENDING DÉCOR
               </span>
               <span className="flex items-center gap-1 text-[11px] font-semibold text-amber-300">
-                <Sparkles className="w-3.5 h-3.5" />
+                <Gift className="w-3.5 h-3.5" />
                 <span>Free Adapter</span>
               </span>
             </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
 import { ProductIllustration } from './ProductIllustrations';
-import { Sparkles, Moon, Sun, Gift, Check, X, Shield, Sliders } from 'lucide-react';
+import { Camera, Moon, Sun, Gift, Check, X, Shield, Sliders } from 'lucide-react';
 
 export const LiveCustomizerModal = ({ product, isOpen, onClose }) => {
   const { addToCart, addNotification } = useStore();
@@ -48,9 +48,9 @@ export const LiveCustomizerModal = ({ product, isOpen, onClose }) => {
         }`}>
           <div className="flex items-center gap-2">
             <span className="p-1.5 rounded-xl bg-rose-600/20 text-rose-500">
-              <Sparkles className="w-4 h-4" />
+              <Camera className="w-4 h-4" />
             </span>
-            <span className="text-sm font-bold tracking-tight">GraphicDen 3D Personalization Studio</span>
+            <span className="text-sm font-bold tracking-tight">GraphicDen Personalization Studio</span>
           </div>
 
           <div className="flex items-center gap-3">
@@ -205,9 +205,9 @@ export const LiveCustomizerModal = ({ product, isOpen, onClose }) => {
               <button
                 type="button"
                 onClick={handleAddCustomized}
-                className="w-full py-3.5 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white rounded-xl text-xs font-bold transition shadow-lg shadow-rose-600/30 flex items-center justify-center gap-2"
+                className="w-full py-3.5 bg-[#b91c1c] hover:bg-[#991b1b] text-white rounded-xl text-xs font-bold transition shadow-lg flex items-center justify-center gap-2"
               >
-                <Sparkles className="w-4 h-4" />
+                <Camera className="w-4 h-4" />
                 <span>Confirm Personalization & Add to Bag</span>
               </button>
             </div>

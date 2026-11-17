@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
 import { ProductIllustration } from './ProductIllustrations';
 import { PromoAdsSection } from './PromoAdsSection';
-import { Sparkles, Camera, ArrowRight, ShieldCheck, Heart } from 'lucide-react';
+import { Camera, ArrowRight, ShieldCheck, Heart } from 'lucide-react';
 
 export const ExactStorefront = ({ onOpenProductModal, onOpenPhotoTester }) => {
   const { products, addToCart, addNotification } = useStore();
